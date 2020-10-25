@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "fibi"
+version = "0.1.0"
+description = ""
+authors = ["marcos <marcos@tiqets.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+bottle = "^0.12.18"
+bottle-oauthlib = "^1.8.0"
+bottle-sqlalchemy = "^0.4.3"
+sqlalchemy = "^1.3.20"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[tool.poetry.scripts]
+serve = "fibi.main:serve"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
+
