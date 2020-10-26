@@ -26,10 +26,16 @@ class App extends React.Component {
     }
 
     handleChange(event) {
-        fetch("http://localhost:8000/api/heart/today")
-            .then(response => response.json())
+        let formatted_date = this.state.startDate.getFullYear() + "-" + (this.state.startDate.getMonth() + 1) + "-" + this.state.startDate.getDate()
+        fetch("http://localhost:8000/api/heart/" + formatted_date)
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json()
+                } else  if (response.status === 401) {
+                    window.location = "http://localhost:8080/auth";
+                }
+            })
             .then(json => {
-                console.log("json")
                 console.log(json)
                 var dataset = json["activities-heart-intraday"].dataset
                 var x = dataset.map((ds) => ds.time)
@@ -45,10 +51,11 @@ class App extends React.Component {
                 ]
 
                 this.setState({data: new_data})
+
             })
             .catch(function (error) {
                     console.log(error)
-                    window.location = "http://localhost:8080/auth";
+                    // window.location = "http://localhost:8080/auth";
                 }
             );
     }
