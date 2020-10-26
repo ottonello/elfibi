@@ -11,6 +11,7 @@ bottle-oauthlib = "^1.8.0"
 bottle-sqlalchemy = "^0.4.3"
 sqlalchemy = "^1.3.20"
 bottle-cors = "^0.1.5"
+riak = {git = "https://github.com/basho/riak-python-client"}
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

@@ -37,7 +37,7 @@ class App extends React.Component {
             })
             .then(json => {
                 console.log(json)
-                var dataset = json["activities-heart-intraday"].dataset
+                var dataset = json.dataset
                 var x = dataset.map((ds) => ds.time)
                 var y = dataset.map((ds) => ds.value)
                 var new_data = [

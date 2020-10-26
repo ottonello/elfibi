@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import bottle
 import requests
 from fibi.db import User
@@ -5,6 +7,7 @@ from requests.auth import HTTPBasicAuth
 from urllib.parse import urlencode
 
 from fibi.main import app
+from fibi.riak import add_heartrate_data, get_heartrate_data
 
 
 @app.get("/auth")
@@ -76,9 +79,11 @@ def refresh_token(db, user):
 
 
 # @app.get("/heart/<date:re[0-1]{4}-re[0-1]{2}-re[0-1]{2}>")
-@app.get("/heart/<date>")
-def heart_today(db, date):
-    print(date)
+@app.get("/heart/<date_string>")
+def heart_today(db, date_string):
+    parsed_date = datetime.strptime(date_string, "%Y-%m-%d").date()
+
+    print(date_string)
     user_id = bottle.request.get_cookie("user_id")
     if not user_id:
         print("Cookie not found")
@@ -92,16 +97,22 @@ def heart_today(db, date):
     # user's access token.
     #GET https://api.fitbit.com/1/user/-/activities/heart/date/today/1d.json
     #/1/user/-/activities/heart/date/today/1d.json
-    heart_rate_today = f"https://api.fitbit.com/1/user/{user_id}/activities/heart/date/{date}/1d.json"
-    url = heart_rate_today.format(user_id=user.fitbit_user_id)
-    print(f"Requesting {url}")
-    result = requests.get(url, headers={"Authorization": f"Bearer {user.access_token}" })
-    print(result.json())
-    if result.status_code == 401:
-        json_result = result.json()
-        if 'errors' in json_result and json_result["errors"][0]["errorType"] == "expired_token":
-            print("refresh token!")
-            refresh_token(db, user)
-        else:
-            bottle.abort(401)
-    return result.json()
+    dataset = get_heartrate_data(user_id, parsed_date)
+    # print(dataset)
+    if not dataset:
+        heart_rate_today = f"https://api.fitbit.com/1/user/{user_id}/activities/heart/date/{date_string}/1d.json"
+        url = heart_rate_today.format(user_id=user.fitbit_user_id)
+        print(f"Requesting {url}")
+        result = requests.get(url, headers={"Authorization": f"Bearer {user.access_token}" })
+        json = result.json()
+        print(json)
+        if result.status_code == 401:
+            json_result = json
+            if 'errors' in json_result and json_result["errors"][0]["errorType"] == "expired_token":
+                print("refresh token!")
+                refresh_token(db, user)
+            else:
+                bottle.abort(401)
+        dataset = json["activities-heart-intraday"]["dataset"]
+        add_heartrate_data(user_id, parsed_date, dataset)
+    return {"dataset": dataset}
