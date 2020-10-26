@@ -10,4 +10,4 @@ class User(Base):
     refresh_token = Column(String)
 
     def __repr__(self):
-        return "<User('%d', '%s')>" % (self.fitbit_user_id, self.name)
+        return "<User('%s')>" % (self.fitbit_user_id)

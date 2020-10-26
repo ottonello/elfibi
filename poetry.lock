@@ -31,6 +31,17 @@ version = "0.12.18"
 
 [[package]]
 category = "main"
+description = "CORS plugin for Bottle framework"
+name = "bottle-cors"
+optional = false
+python-versions = "*"
+version = "0.1.5"
+
+[package.dependencies]
+bottle = "*"
+
+[[package]]
+category = "main"
 description = "Bottle adapter for OAuthLib framework (OAuth2.0)"
 name = "bottle-oauthlib"
 optional = false
@@ -237,7 +248,7 @@ python-versions = "*"
 version = "0.2.5"
 
 [metadata]
-content-hash = "7993dc5783640b13462469307ece602e3e71d4d57867f039e15e9ca6f45e98ad"
+content-hash = "9e8a1036e782ecb4912550a16d7608b662ddc37155db671833a83bb1cc79ced4"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -252,6 +263,10 @@ attrs = [
 bottle = [
     {file = "bottle-0.12.18-py3-none-any.whl", hash = "sha256:43157254e88f32c6be16f8d9eb1f1d1472396a4e174ebd2bf62544854ecf37e7"},
     {file = "bottle-0.12.18.tar.gz", hash = "sha256:0819b74b145a7def225c0e83b16a4d5711fde751cd92bae467a69efce720f69e"},
+]
+bottle-cors = [
+    {file = "bottle-cors-0.1.5.tar.gz", hash = "sha256:7045cc3a02c727527c1947c55795c5bd8df25f3a27998389856a3c5d3e2f288a"},
+    {file = "bottle_cors-0.1.5-py3-none-any.whl", hash = "sha256:16b32f0bf4c0b5fa7ee4cba503e23ca9a35adb0f0b628b347e994ec807c69e32"},
 ]
 bottle-oauthlib = [
     {file = "bottle-oauthlib-1.8.0.tar.gz", hash = "sha256:142f20a532a231a14b9357196ab7c9d4bd1cead4f1cf766d65139f617e907d69"},

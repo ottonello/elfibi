@@ -1,9 +1,12 @@
+import logging
 
 import bottle
 from bottle.ext import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
+from truckpad.bottle.cors import CorsPlugin
 
+logger= logging.getLogger(__name__)
 
 Base = declarative_base()
 engine = create_engine('sqlite:///db', echo=True)
@@ -18,6 +21,10 @@ plugin = sqlalchemy.Plugin(
     # If it is true and keyword is not defined, plugin uses **kwargs argument to inject session database (default False).
 )
 app.install(plugin)
+app.mount('/api', app)
 app.config.load_config('config.ini')
 
 import fibi.routes
+
+logger.warning("CORS ENABLED!")
+app.install(CorsPlugin(origins=['*']))
