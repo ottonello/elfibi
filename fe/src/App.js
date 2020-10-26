@@ -14,25 +14,38 @@ class App extends React.Component {
                     type: 'columns',
                     mode: 'lines+markers',
                     marker: {color: 'red'},
-                },
-                {type: 'lines', x: [1, 2, 3], y: [2, 5, 3]},
+                }
             ]
         }
         console.log("YES")
     }
 
     handleChange(event) {
-        console.log("GRACIAS PELOTUDO")
         fetch("http://localhost:8000/api/heart/today")
             .then(response => response.json())
             .then(json => {
-                var new_data = json.get("activities-heart-intraday")
+                console.log("json")
+                console.log(json)
+                var dataset = json["activities-heart-intraday"].dataset
+                var x = dataset.map((ds) => ds.time)
+                var y = dataset.map((ds) => ds.value)
+                var new_data = [
+                    {
+                        x: x,
+                        y: y,
+                        type: 'columns',
+                        mode: 'lines+markers',
+                        marker: {color: 'red'},
+                    }
+                ]
+
                 this.setState({data: new_data})
             })
             .catch(function (error) {
-                // window.location = "http://localhost:8080/auth";
-            }
-        );
+                console.log(error)
+                    window.location = "http://localhost:8080/auth";
+                }
+            );
     }
 
     render() {
@@ -40,7 +53,7 @@ class App extends React.Component {
             <div className="App">
                 <Plot
                     data={this.state.data}
-                    layout={{title: 'A Fancy Plot'}}
+                    layout={{title: 'Your heart rate'}}
                     style={{width: "100%", height: "100%"}}
                 />
                 <Button variant="primary" onClick={(e) => this.handleChange(e)}>Fetch those heart beats</Button>{' '}
