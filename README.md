@@ -31,6 +31,13 @@ client_secret=dd80a452f927bc3ee91104dc7d9dd9b3
 
 All you need is Docker, NPM and a Poetry env.
 
+
+Start nginx and Riak(docker-compose)
+
+````shell script
+docker-compose up
+````
+
 Start the frontend:
 
 ```shell script
@@ -44,20 +51,7 @@ Start the backend:
 ./serve.sh
 ```
 
-Start nginx(Docker)
 
-````shell script
-./nginx.sh
-````
-
-Start Riak(Docker)
-
-```shell script
-
-````shell script
-./riak.sh
-````
-```
 
 
 # TODO
