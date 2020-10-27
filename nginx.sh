@@ -1,1 +1,1 @@
-docker run --name http-proxy -v $PWD/nginx.conf:/etc/nginx/nginx.conf -p 8000:8000 -itd --restart always nginx nginx-debug -g 'daemon off;'
+docker run --name http-proxy -v $PWD/nginx.conf:/etc/nginx/nginx.conf -p 8000:8000 -itd --restart always nginx # nginx-debug -g 'daemon off;'

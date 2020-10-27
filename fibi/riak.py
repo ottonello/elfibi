@@ -16,7 +16,6 @@ def _get_datetime(the_date: date, time: str):
 
 def add_heartrate_data(user_id: str, the_date: date, dataset: List[Dict]):
     rows = [[user_id, _get_datetime(the_date, datapoint["time"]), float(datapoint["value"])] for datapoint in dataset]
-    print(rows)
     table_obj = client.table("HeartRate").new(rows)
     try:
         result = client.ts_put(table_obj)
@@ -44,7 +43,6 @@ def get_heartrate_data(user_id: str, the_date: date):
     dataset = []
     for row in data_set.rows:
         timestamp = datetime.fromtimestamp(row[1]/1000)
-        print(row[1], timestamp)
         new_row = {"time": timestamp.strftime("%H:%M:%S"), "value": row[2]}
         dataset.append(new_row)
     return dataset

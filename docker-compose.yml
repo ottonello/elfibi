@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  http-proxy:
+    image: nginx:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+  riak-ts:
+    image: basho/riak-ts
+    ports:
+      - "8098:8098"
+      - "8087:8087"
+    volumes:
+      - ./riak/schemas:/etc/riak/schemas
+      - ./riak/logs:/var/log/riak
+      - ./riak/data:/var/lib/riak

@@ -5,24 +5,20 @@ import Button from 'react-bootstrap/Button';
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
+import {Overlay, Spinner} from "react-bootstrap";
 
 class App extends React.Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            data: [
-                {
-                    x: [1, 2, 3],
-                    y: [2, 6, 3],
-                    type: 'columns',
-                    mode: 'lines+markers',
-                    marker: {color: 'red'},
-                }
-            ],
-            startDate: new Date()
+            startDate: new Date(),
+            data: [],
+            layout: {title: 'Your heart rate', yaxis: {fixedrange: true}, xaxis: {tickformat: "%H~%M~%S"}},
+            frames: [],
+            config: {}
         }
-        console.log("YES")
+        this.target = React.createRef()
     }
 
     handleChange(event) {
@@ -31,7 +27,7 @@ class App extends React.Component {
             .then(response => {
                 if (response.status === 200) {
                     return response.json()
-                } else  if (response.status === 401) {
+                } else if (response.status === 401) {
                     window.location = "http://localhost:8080/auth";
                 }
             })
@@ -44,7 +40,7 @@ class App extends React.Component {
                     {
                         x: x,
                         y: y,
-                        type: 'columns',
+                        type: 'scatter',
                         mode: 'lines+markers',
                         marker: {color: 'red'},
                     }
@@ -55,9 +51,8 @@ class App extends React.Component {
             })
             .catch(function (error) {
                     console.log(error)
-                    // window.location = "http://localhost:8080/auth";
                 }
-            );
+            ).finally((info) => this.setState({show: false}));
     }
 
     render() {
@@ -65,11 +60,34 @@ class App extends React.Component {
             <div className="App">
                 <Plot
                     data={this.state.data}
-                    layout={{title: 'Your heart rate'}}
+                    layout={this.state.layout}
                     style={{width: "100%", height: "100%"}}
+                    frames={this.state.frames}
+                    config={this.state.config}
                 />
-
-                <Button variant="primary" onClick={(e) => this.handleChange(e)}>Fetch those heart beats</Button>{' '}
+                <Overlay target={this.target.current} show={this.state.show} placement="left">
+                    {({placement, arrowProps, show: _show, popper, ...props}) => (
+                        <div
+                            {...props}
+                            style={{
+                                backgroundColor: 'rgba(255, 100, 100, 0.85)',
+                                padding: '2px 10px',
+                                color: 'white',
+                                borderRadius: 3,
+                                ...props.style,
+                            }}
+                        >
+                            <Spinner animation="border" role="status">
+                                <span className="sr-only">Loading...</span>
+                            </Spinner>
+                        </div>
+                    )}
+                </Overlay>
+                <Button variant="primary"
+                        ref={this.target} onClick={(e) => {
+                    this.handleChange(e);
+                    this.setState({show: true})
+                }}>Fetch those heart beats</Button>{' '}
                 <DatePicker
                     selected={this.state.startDate}
                     onChange={date => this.setState({startDate: date})}

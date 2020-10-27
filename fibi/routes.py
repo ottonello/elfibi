@@ -105,7 +105,6 @@ def heart_today(db, date_string):
         print(f"Requesting {url}")
         result = requests.get(url, headers={"Authorization": f"Bearer {user.access_token}" })
         json = result.json()
-        print(json)
         if result.status_code == 401:
             json_result = json
             if 'errors' in json_result and json_result["errors"][0]["errorType"] == "expired_token":
