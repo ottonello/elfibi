@@ -61,3 +61,4 @@ Start the backend:
 - Force refetching data for incomplete dates(i.e. when requesting today again when new data is available it won't be fetched)
 - Docker compose file
 - Change the app name
+- Remove CORS for prod if it would ever be used in the wild
