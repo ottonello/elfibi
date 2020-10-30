@@ -1,0 +1,1 @@
+A custom Riak-TS image where the startup scripts don't try to recreate existing schemas.

@@ -7,7 +7,7 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
   riak-ts:
-    image: basho/riak-ts
+    build: ./riak/docker
     ports:
       - "8098:8098"
       - "8087:8087"
@@ -15,3 +15,7 @@ services:
       - ./riak/schemas:/etc/riak/schemas
       - ./riak/logs:/var/log/riak
       - ./riak/data:/var/lib/riak
+  fe:
+    build: ./fe
+    ports:
+      - "3000:3000"
